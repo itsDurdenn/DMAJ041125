@@ -1,0 +1,44 @@
+{% extends "Base.html"%}
+
+{% block contenido %}
+<main class="container w-25">
+        <h1 class="text-center">Crea una cuenta</h1>
+        <p class="text-center"  >Es rapido y facil</p>
+        <section>
+            <form>
+                <div class="row mb-2">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Nombre">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Apellido">
+                    </div>
+                </div>
+
+            </form>
+            <label for="nombre" class="form-label">Fecha de nacimiento</label>
+            <input type="number" placeholder="Dia">
+            <input type="text" placeholder="Mes">
+            <input type="number" placeholder="Año">
+            <form action="#">
+                <label for="Mujer" class="form-label">Mujer</label>
+                <input type="checkbox" name="Mujer" id="Mujer">
+                <label for="Hombre" class="form-label">Hombre</label>
+                <input type="checkbox" name="Hombre" id="Hombre">
+                <label for="Personalizado" class="form-label">Personalizado</label>
+                <input type="checkbox" name="Personalizado" id="Personalizado">
+            </form>
+            <input type="text" class="form-control" placeholder="Numero de celular o correo electronico">
+            <input type="password" class="form-control" placeholder="Contraseña nueva">
+            <p class="text-secondary">Es posible que las personas que usan nuestro servicio hayan subido tu información de contacto a Facebook.
+                Al hacer clic en "Registrarte", aceptas nuestras Condiciones, la Política de privacidad y la Política de cookies. Es posible que te enviemos notificaciones por SMS, que puedes desactivar cuando quieras.</p>
+            <div class="text-center">
+            <button type="submit" class="btn btn-success">Registrarte</button>
+            </div>
+            <div class="text-center">
+            <a href="https://www.facebook.com/login/?privacy_mutation_token=eyJ0eXBlIjowLCJjcmVhdGlvbl90aW1lIjoxNzU5NDEzMjg2LCJjYWxsc2l0ZV9pZCI6MjY5NTQ4NDUzMDcyMDk1MX0%3D">¿Ya tienes cuenta?</a>
+            </div>
+        </section>
+    </main>
+
+{% endblock contenido %}
