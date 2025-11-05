@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="es-mx">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% extends "Base.html"%}
+
+{% block contenido %}
+
 <body class="container-md bg-info-subtle">
     <h1 class="text-center bg-success">Calculadora de tasa metabólica basal (TMB)</h1>
 
-    <form method="POST" action="/calcular">
+    <form method="POST" action="/calculadora">
         <div class="input-group mb-3">
             <span class="input-group-text bg-danger-subtle">Peso (kg)</span>
             <input type="number" name="peso" class="form-control" required>
@@ -33,9 +29,11 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Calcular TMB</button>
+        <button type="submit" class="btn btn-primary" href="">Calcular TMB</button>
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+{% endblock contenido %}
