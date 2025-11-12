@@ -1,5 +1,6 @@
 ### Fecha: 
 Martes 4 de Noviembre del 2025
+
 ### Integrantes: 
 Diaz Martinez Angel Joel, De Luna Castruita Santiago 
 
@@ -12,5 +13,12 @@ Programacion
 ### Grupo: 
 3 - D
 
-### Mi foto:
+### Nuestras fotos:
 ![Mi foto](f1.jpg)
+
+
+pip install -r
+requirements.txt
+
+pip freeze >
+requirements.txt
