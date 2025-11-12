@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -10,7 +10,13 @@ def index():
 def calculadora():
     return render_template('calculadora.html')
 
+@app.route('/registro')
+def registro():
+    return render_template('registro.html')
 
+@app.route('/sesion')
+def sesion():
+    return render_template('sesion.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
