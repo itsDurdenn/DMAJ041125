@@ -17,8 +17,9 @@ def registro():
 @app.route('/sesion')
 def sesion():
     return render_template('sesion.html')
+
 @app.route('/politicas')
-def sesion():
+def politicas():
     return render_template('politicas de seguridad.html')
 
 if __name__ == '__main__':
