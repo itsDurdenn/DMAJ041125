@@ -8,7 +8,7 @@ def index():
 
 @app.route('/calculadora')
 def calculadora():
-    return render_template('calculadora.html')
+    return render_template('calculadoraTMB.html')
 
 @app.route('/registro')
 def registro():
