@@ -7,6 +7,15 @@
     <title>NutriApp</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        /* Línea divisoria gris reutilizable */
+        .divider {
+            border: 0;
+            height: 1px;
+            background-color: #cccccc; /* gris claro */
+            margin: 1.5rem 0; /* espacio arriba/abajo */
+        }
+    </style>
 </head>
 
 <body class="container-md bg-info-subtle">
@@ -46,7 +55,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            <li><a class="dropdown-item" href="/perfil">Perfil</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -59,6 +68,8 @@
 {%block contenido%} 
 {%endblock %}
 </section>
+
+<hr class="divider bg-dark">
 
 <h5 class="text-center">Tu aliado digital para una vida más saludable</h5>
     <p>
