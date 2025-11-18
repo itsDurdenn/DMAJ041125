@@ -1,0 +1,32 @@
+{% extends "Base.html" %} 
+
+{% block contenido %}
+
+<h1>Calculadora IMC</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %} {% for
+category, msg in messages %}
+<div style="color: red">{{ msg }}</div>
+{% endfor %} {% endwith %} {% if resultado %}
+<p><strong>Resultado:</strong> {{ resultado }}</p>
+{% endif %}
+
+<form method="post" action="{{ url_for('imc') }}">
+    <label>Peso (kg):</label><br />
+    <input
+    type="text"
+    name="peso"
+    value="{{ form.peso if form else '' }}"
+    /><br /><br />
+
+    <label>Altura (cm o m):</label><br />
+    <input
+    type="text"
+    name="altura"
+    value="{{ form.altura if form else '' }}"
+    /><br /><br />
+
+    <button type="submit">Calcular IMC</button>
+</form>
+
+{% endblock contenido %}

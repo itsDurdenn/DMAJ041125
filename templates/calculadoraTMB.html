@@ -1,39 +1,36 @@
-{% extends "Base.html"%}
+{% extends "Base.html" %}
 
 {% block contenido %}
 
-<body class="container-md bg-info-subtle">
-    <h1 class="text-center bg-success">Calculadora de tasa metabólica basal (TMB)</h1>
+<h1>Calculadora TMB</h1>
 
-    <form method="POST" action="/calculadora">
-        <div class="input-group mb-3">
-            <span class="input-group-text bg-danger-subtle">Peso (kg)</span>
-            <input type="number" name="peso" class="form-control" required>
-        </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, msg in messages %}
+    <div style="color: red;">{{ msg }}</div>
+    {% endfor %}
+{% endwith %}
 
-        <div class="input-group mb-3">
-            <span class="input-group-text bg-danger-subtle">Altura (cm)</span>
-            <input type="number" name="altura" class="form-control" required>
-        </div>
+{% if resultado %}
+    <p><strong>Resultado:</strong> {{ resultado }}</p>
+{% endif %}
 
-        <div class="input-group mb-3">
-            <span class="input-group-text bg-danger-subtle">Edad</span>
-            <input type="number" name="edad" class="form-control" required>
-        </div>
+<form method="post" action="{{ url_for('tmb') }}">
+    <label>Peso (kg):</label><br>
+    <input type="text" name="peso" value="{{ form.peso if form else '' }}"><br><br>
 
-        <div class="input-group mb-3">
-            <label class="input-group-text bg-danger-subtle" for="genero">fisionomia:</label>
-            <select class="form-select" name="genero" id="genero" required>
-                <option value="hombre">masculina</option>
-                <option value="mujer">femenina</option>
-            </select>
-        </div>
+    <label>Altura (cm o m):</label><br>
+    <input type="text" name="altura" value="{{ form.altura if form else '' }}"><br><br>
 
-        <button type="submit" class="btn btn-primary" href="">Calcular TMB</button>
-    </form>
+    <label>Edad:</label><br>
+    <input type="number" name="edad" value="{{ form.edad if form else '' }}"><br><br>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <label>Sexo:</label><br>
+    <select name="sexo">
+    <option value="Masculino" {% if form and form.sexo and form.sexo.lower().startswith('m') %}selected{% endif %}>Masculino</option>
+    <option value="Femenino" {% if form and form.sexo and form.sexo.lower().startswith('f') %}selected{% endif %}>Femenino</option>
+    </select><br><br>
+
+    <button type="submit">Calcular TMB</button>
+</form>
 
 {% endblock contenido %}
