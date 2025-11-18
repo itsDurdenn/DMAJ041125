@@ -1,58 +1,157 @@
-{% extends "Base.html"%}
+{% extends "Base.html" %} {% block contenido %}
+<main class="container w-50 mx-auto">
+    <h1 class="text-center">Crea una cuenta</h1>
+    <p class="text-center">Es rápido y fácil</p>
 
-{% block contenido %}
-<main class="container w-25">
-        <h1 class="text-center">Crea una cuenta</h1>
-        <p class="text-center"  >Es rapido y facil</p>
-        <section>
-            <form>
-                <div class="row mb-2">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Nombre">
-                    </div>
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Apellido">
-                    </div>
-                </div>
+    <form method="post" action="{{ url_for('registro') }}">
+    <div class="row mb-2">
+        <div class="col">
+        <input
+            type="text"
+            name="nombre"
+            class="form-control"
+            placeholder="Nombre"
+            required
+        />
+        </div>
+        <div class="col">
+        <input
+            type="text"
+            name="apellido"
+            class="form-control"
+            placeholder="Apellido"
+            required
+        />
+        </div>
+    </div>
 
-            </form>
-            <label for="nombre" class="form-label">Fecha de nacimiento</label>
-            <input type="number" placeholder="Dia">
-            <input type="text" placeholder="Mes">
-            <input type="number" placeholder="Año">
-            <form action="#">
-                <label for="Mujer" class="form-label">Mujer</label>
-                <input type="checkbox" name="Mujer" id="Mujer">
-                <label for="Hombre" class="form-label">Hombre</label>
-                <input type="checkbox" name="Hombre" id="Hombre">
-            </form>
-            <form action="#">
-                <div>
-                    Nivel de actividad fisica
-                    <select  class="text-secondary">
-                        <option>Sedentario</option>
-                        <option>Actividad ligera</option>
-                        <option>Actividad moderada</option>
-                        <option>Actividad intensa</option>
-                        <option>Actividad muy intensa</option>
-                    </select>
-                </div>
-            </form>
+    <label class="form-label">Fecha de nacimiento</label>
+    <div class="d-flex gap-2 mb-2">
+        <input
+        type="number"
+        name="dia"
+        class="form-control"
+        placeholder="Día"
+        min="1"
+        max="31"
+        required
+        />
+        <input
+        type="text"
+        name="mes"
+        class="form-control"
+        placeholder="Mes"
+        required
+        />
+        <input
+        type="number"
+        name="anio"
+        class="form-control"
+        placeholder="Año"
+        min="1900"
+        max="2100"
+        required
+        />
+    </div>
 
-            <input type="text" class="form-control" placeholder="Numero de celular o correo electronico">
-            <input type="password" class="form-control" placeholder="Contraseña nueva">
-            <p class="text-secondary">Es posible que las personas que usan nuestro servicio hayan subido tu información de contacto a NutriApp.
-                Al hacer clic en "Registrarte", aceptas nuestras Condiciones, la Política de privacidad y la Política de cookies. Es posible que te enviemos notificaciones por SMS, que puedes desactivar cuando quieras.</p>
-            <div class="text-center">
-            <button type="submit" class="btn btn-success">Registrarte</button>
-            </div>
-            <div class="text-center">
-            <a href="/sesion">¿Ya tienes cuenta?</a>
-            </div>
-             <div class="text-center">
-            <a href="/politicas">la Política de privacidad y la Política de cookies</a>
-            </div>
-        </section>
-    </main>
+    <label class="form-label">Sexo</label>
+    <div class="mb-2">
+        <label class="me-2"
+        ><input type="radio" name="sexo" value="Mujer" required /> Mujer</label
+        >
+        <label class="me-2"
+        ><input type="radio" name="sexo" value="Hombre" /> Hombre</label
+        >
+        <label><input type="radio" name="sexo" value="Otro" /> Otro</label>
+    </div>
 
+    <div class="mb-2">
+        <label class="form-label">Nivel de actividad física</label>
+        <select name="actividad" class="form-select">
+        <option value="Sedentario">Sedentario</option>
+        <option value="Ligera">Actividad ligera</option>
+        <option value="Moderada">Actividad moderada</option>
+        <option value="Intensa">Actividad intensa</option>
+        <option value="Muy intensa">Actividad muy intensa</option>
+        </select>
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">Nivel de experiencia</label>
+        <select name="experiencia" class="form-select">
+        <option value="Principiante">Principiante</option>
+        <option value="Intermedio">Intermedio</option>
+        <option value="Avanzado">Avanzado</option>
+        </select>
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">Objetivo</label>
+        <select name="objetivo" class="form-select">
+        <option value="Perder peso">Perder peso</option>
+        <option value="Ganar masa">Ganar masa muscular</option>
+        <option value="Mantener">Mantener peso</option>
+        <option value="Mejorar salud">Mejorar salud</option>
+        </select>
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">Preferencias / Restricciones</label>
+        <div>
+        <label
+            ><input type="checkbox" name="restricciones" value="Sin gluten" /> Sin
+            gluten</label
+        ><br />
+        <label
+            ><input type="checkbox" name="restricciones" value="Sin lactosa" />
+            Sin lactosa</label
+        ><br />
+        <label
+            ><input type="checkbox" name="restricciones" value="Vegetariano" />
+            Vegetariano</label
+        ><br />
+        <label
+            ><input type="checkbox" name="restricciones" value="Vegano" />
+            Vegano</label
+        ><br />
+        <label
+            ><input type="checkbox" name="restricciones" value="Ninguna" />
+            Ninguna</label
+        >
+        </div>
+    </div>
+
+    <div class="mb-2">
+        <input
+        type="text"
+        name="contacto"
+        class="form-control"
+        placeholder="Número o correo electrónico"
+        required
+        />
+    </div>
+
+    <div class="mb-3">
+        <input
+        type="password"
+        name="password"
+        class="form-control"
+        placeholder="Contraseña nueva"
+        required
+        />
+    </div>
+
+    <p class="text-secondary small">
+        Al registrarte aceptas nuestras Condiciones y la Política de privacidad.
+    </p>
+
+    <div class="text-center mb-2">
+        <button type="submit" class="btn btn-success">Registrarte</button>
+    </div>
+
+    <div class="text-center">
+        <a href="{{ url_for('sesion') }}">¿Ya tienes cuenta?</a>
+    </div>
+    </form>
+</main>
 {% endblock contenido %}
