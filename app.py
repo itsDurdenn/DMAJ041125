@@ -50,7 +50,7 @@ def imc():
             resultado = f"Tu IMC es {imc_valor:.2f} ({estado})"
         except Exception:
             flash("Error: revisa los datos ingresados.", "danger")
-    return render_template('imc.html', resultado=resultado)
+    return render_template('calculadoraIMC.html', resultado=resultado)
 
 @app.route('/tmb', methods=['GET', 'POST'])
 def tmb():
@@ -73,7 +73,7 @@ def tmb():
             resultado = f"Tu TMB es {tmb_valor:.2f} kcal/día"
         except Exception:
             flash("Error: revisa los datos ingresados.", "danger")
-    return render_template('tmb.html', resultado=resultado)
+    return render_template('calculadoraTMB.html', resultado=resultado)
 
 if __name__ == '__main__':
     app.run(debug=True)
