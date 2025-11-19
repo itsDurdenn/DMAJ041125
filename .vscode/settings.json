@@ -2,9 +2,12 @@
     "cSpell.words": [
         "Calculadora",
         "contenido",
+        "Edad",
+        "Femenino",
         "Herramientas",
         "Inicio",
         "inteligencia",
+        "Masculino",
         "mismo",
         "Nutri",
         "Pagina",
@@ -13,6 +16,8 @@
         "Registrarse",
         "registro",
         "sesion",
+        "Sexo",
+        "startswith",
         "stylesheet",
         "titulo",
         "transforma"
