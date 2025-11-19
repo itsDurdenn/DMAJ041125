@@ -2,10 +2,19 @@
 
 {% block contenido %}
 
-<body>
-    <h1 class="text-center">Perfil</h1>
-</body>
-</html>
+<h1 class="text-center">Perfil</h1>
 
+{% if user %}
+<div class="perfil-datos">
+    <p><strong>Nombre:</strong> {{ user.get('nombre') }}</p>
+    <p><strong>Email:</strong> {{ user.get('email') }}</p>
+    <p><strong>Edad:</strong> {{ user.get('edad') }}</p>
+    <p><strong>Sexo:</strong> {{ user.get('sexo') }}</p>
+    <p><strong>Peso:</strong> {{ user.get('peso') }} kg</p>
+    <p><strong>Altura:</strong> {{ user.get('altura') }} cm</p>
+</div>
+{% else %}
+    <p>No hay datos de perfil. Completa el formulario de registro.</p>
+{% endif %}
 
 {% endblock contenido %}

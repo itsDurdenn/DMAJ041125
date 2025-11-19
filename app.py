@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash,session
 
 app = Flask(__name__)
 app.secret_key = 'random_value'
@@ -7,13 +7,22 @@ app.secret_key = 'random_value'
 def index():
     return render_template('Base.html')
 
-@app.route('/calculadora')
-def calculadora():
-    return render_template('calculadoraTMB.html')
-
-@app.route('/registro')
+@app.route('/registro', methods=['GET', 'POST'])
 def registro():
+    if request.method == 'POST':
+        user = {
+            'nombre': request.form.get('nombre'),
+            'email': request.form.get('email'),
+            'edad': request.form.get('edad'),
+            'sexo': request.form.get('sexo'),
+            'peso': request.form.get('peso'),
+            'altura': request.form.get('altura')
+        }
+        session['user'] = user
+        flash('Registro guardado correctamente.', 'success')
+        return redirect(url_for('perfil'))
     return render_template('registro.html')
+
 
 @app.route('/sesion')
 def sesion():
@@ -25,7 +34,8 @@ def politicas():
 
 @app.route('/perfil')
 def perfil():
-    return render_template('perfil.html')
+    user = session.get('user')
+    return render_template('perfil.html', user=user)
 
 @app.route('/imc', methods=['GET', 'POST'])
 def imc():
@@ -74,6 +84,31 @@ def tmb():
         except Exception:
             flash("Error: revisa los datos ingresados.", "danger")
     return render_template('calculadoraTMB.html', resultado=resultado)
+
+@app.route('/gct',methods=['GET', 'POST'])
+def gct():
+    resultado = None
+    if request.method == 'POST':
+        try:
+            tmb = float(request.form.get('tmb', 0))
+            actividad = request.form.get('actividad')
+
+            factores_actividad = {
+                "Sedentario": 1.2,
+                "Ligera": 1.375,
+                "Moderada": 1.55,
+                "Intensa": 1.725,
+                "Muy Intensa": 1.9
+            }
+
+            if actividad not in factores_actividad or tmb <= 0:
+                raise ValueError("Datos inválidos.")
+
+            gct_valor = tmb * factores_actividad[actividad]
+            resultado = f"Tu GCT es {gct_valor:.2f} kcal/día"
+        except Exception:
+            flash("Error: revisa los datos ingresados.", "danger")
+    return render_template('calculadoraGCT.html', resultado=resultado)
 
 if __name__ == '__main__':
     app.run(debug=True)
