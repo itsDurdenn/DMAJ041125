@@ -2,6 +2,34 @@
 
 {% block contenido %}
 
+<h1 class="text-center">Calculadora PCI</h1>
+
+<p>
+    ¿Qué hace?
+    Proporciona una estimación del peso “ideal” basado en la altura y el sexo, útil como referencia.
+</p>
+
+<p>
+    Fórmula común (Devine):
+    Para hombres:
+    Peso ideal (kg) = 50 + 2.3 × (altura en pulgadas por encima de 5 pies)
+</p>
+
+<p>
+    Para mujeres:
+    Peso ideal (kg) = 45.5 + 2.3 × (altura en pulgadas por encima de 5 pies)
+</p>
+
+<p>
+    Cómo convertir:
+    1 pulgada = 2.54 cm ; 5 pies = 60 pulgadas = 152.4 cm
+</p>
+
+<p>
+    Notas:
+    - Es una referencia histórica; no considera masa muscular, estructura ósea ni contexto cultural.
+</p>
+
 <form method="POST">
     <div class="mb-3"><label>Altura (cm):</label><input name="altura" type="number" class="form-control" required></div>
     <div class="mb-3">

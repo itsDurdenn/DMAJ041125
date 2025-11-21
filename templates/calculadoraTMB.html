@@ -4,6 +4,33 @@
 
 <h1 class="text-center">Calculadora TMB</h1>
 
+<p>
+    ¿Qué hace?
+    Estima las calorías que gasta tu cuerpo en reposo (mantener funciones vitales sin actividad física).
+</p>
+
+<p>
+    Datos necesarios:
+    Edad, sexo, peso (kg), estatura (cm).
+</p>
+
+<p>
+    Fórmulas (Harris-Benedict revisada):
+    Para hombres:
+    TMB = 88.362 + (13.397 × peso en kg) + (4.799 × estatura en cm) − (5.677 × edad en años)
+</p>
+
+<p>
+    Para mujeres:
+    TMB = 447.593 + (9.247 × peso en kg) + (3.098 × estatura en cm) − (4.330 × edad en años)
+</p>
+
+<p>
+    Notas:
+    - Es el punto de partida para calcular calorías totales diarias.
+    - Otras fórmulas (Mifflin-St Jeor, etc.) existen y suelen dar resultados similares.
+</p>
+
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% for category, msg in messages %}
     <div style="color: red;">{{ msg }}</div>
