@@ -110,5 +110,9 @@ def gct():
             flash("Error: revisa los datos ingresados.", "danger")
     return render_template('calculadoraGCT.html', resultado=resultado)
 
+@app.route('/articulos')
+def articulos():
+    return render_template('articulos.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

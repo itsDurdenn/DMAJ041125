@@ -15,7 +15,7 @@ Programacion
 
 ### Nuestras fotos:
 ![Mi foto](f1.jpg)
-
+![Mi foto](f2.jpg)
 
 pip install -r
 requirements.txt
