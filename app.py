@@ -110,6 +110,27 @@ def gct():
             flash("Error: revisa los datos ingresados.", "danger")
     return render_template('calculadoraGCT.html', resultado=resultado)
 
+@app.route('/pci', methods=['GET', 'POST'])
+def peso_ideal():
+    resultado = None
+    if request.method == 'POST':
+        try:
+            altura = float(request.form.get('altura', 0))
+            sexo = request.form.get('sexo')
+
+            if sexo not in ["Masculino", "Femenino"] or altura <= 0:
+                raise ValueError("Datos inválidos.")
+
+            if sexo == 'Masculino':
+                peso_ideal_valor = 50 + 2.3 * ((altura / 2.54) - 60)
+            else:
+                peso_ideal_valor = 45.5 + 2.3 * ((altura / 2.54) - 60)
+
+            resultado = f"Tu peso ideal es {peso_ideal_valor:.2f} kg"
+        except Exception:
+            flash("Error: revisa los datos ingresados.", "danger")
+    return render_template('peso_ideal.html', resultado=resultado)
+
 @app.route('/articulos')
 def articulos():
     return render_template('articulos.html')
