@@ -1,5 +1,17 @@
 {% extends "Base.html" %} 
 
 {% block contenido %}
+<h4>Calculadora de Macronutrientes</h4>
+<form method="POST">
+    <div class="mb-3"><label>Calorías diarias:</label><input name="calorias" type="number" class="form-control" required></div>
+    <button>Calcular</button>
+</form>
+{% if resultado %}
+<div class="alert mt-3">
+    <p>Proteínas: {{ resultado.proteinas }} g</p>
+    <p>Grasas: {{ resultado.grasas }} g</p>
+    <p>Carbohidratos: {{ resultado.carbohidratos }} g</p>
+</div>
+{% endif %}
 
-{% endblock contenido %}
+{% endblock %}

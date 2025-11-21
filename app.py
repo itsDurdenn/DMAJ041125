@@ -129,7 +129,27 @@ def peso_ideal():
             resultado = f"Tu peso ideal es {peso_ideal_valor:.2f} kg"
         except Exception:
             flash("Error: revisa los datos ingresados.", "danger")
-    return render_template('peso_ideal.html', resultado=resultado)
+    return render_template('CalculadoraPCI.html', resultado=resultado)
+
+@app.route('/m', methods=['GET', 'POST'])
+def macronutrientes():
+    resultado = None
+    if request.method == 'POST':
+        try:
+            calorias = float(request.form.get('calorias', 0))
+            if calorias <= 0:
+                raise ValueError("Valor inválido.")
+            proteinas = calorias * 0.3 / 4
+            grasas = calorias * 0.25 / 9
+            carbohidratos = calorias * 0.45 / 4
+            resultado = {
+                "proteinas": round(proteinas, 1),
+                "grasas": round(grasas, 1),
+                "carbohidratos": round(carbohidratos, 1)
+            }
+        except Exception:
+            flash("Error: revisa los datos ingresados.", "danger")
+    return render_template('calculadoraM.html', resultado=resultado)
 
 @app.route('/articulos')
 def articulos():

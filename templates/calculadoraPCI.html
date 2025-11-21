@@ -2,6 +2,19 @@
 
 {% block contenido %}
 
-
+<form method="POST">
+    <div class="mb-3"><label>Altura (cm):</label><input name="altura" type="number" class="form-control" required></div>
+    <div class="mb-3">
+        <label>Sexo:</label>
+        <select name="sexo" class="form-select" required>
+        <option>Masculino</option>
+        <option>Femenino</option>
+        </select>
+    </div>
+    <button >Calcular</button>
+    </form>
+    {% if resultado %}
+    <div class="alert mt-3">{{ resultado }}</div>
+    {% endif %}
 
 {% endblock contenido %}
