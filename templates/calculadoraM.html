@@ -2,6 +2,67 @@
 
 {% block contenido %}
 <h4>Calculadora de Macronutrientes</h4>
+
+<p>Una calculadora de macronutrientes sirve para decirte cuántas proteínas, carbohidratos y grasas debes consumir al día según tu cuerpo y tus objetivos (bajar grasa, subir masa muscular o mantenerte).</p>
+
+<h5>¿Cómo funciona una calculadora de macronutrientes?</h5>
+
+<h6>Primero calcula cuántas calorías necesitas al día.</h6>
+
+
+<ul>Antes de decirte cuántos “macros” necesitas, la calculadora obtiene tu Gasto Calórico Total (GCT), que depende de:
+    <li>Edad</li>
+    <li>Sexo</li>
+    <li>Peso</li>
+    <li>Estatura</li>
+    <li>Nivel de actividad física</li>
+    <li>Objetivo (definir, mantener o volumen)</li>
+</ul>
+
+Esto se hace usando la TMB (Tasa Metabólica Basal) + un factor de actividad.
+
+<li>Define cuántas calorías debes comer según tu objetivo</li>
+
+Ejemplo:
+
+Perder grasa: te resta calorías (déficit)
+
+Ganar músculo: te suma calorías (superávit)
+
+Mantener: se queda igual
+
+3. Divide esas calorías entre macronutrientes
+
+Aquí está la magia.
+Cada macro tiene un valor energético:
+
+Proteína → 4 kcal por gramo
+
+Carbohidratos → 4 kcal por gramo
+
+Grasas → 9 kcal por gramo
+
+La calculadora reparte tus calorías totales así:
+
+🥩 Proteínas
+
+Según tu objetivo:
+
+Perder grasa: 1.8–2.2 g por kg de peso
+
+Mantener: 1.6–2.0 g por kg
+
+Ganar músculo: 2.0–2.5 g por kg
+
+🧈 Grasas
+
+Generalmente entre 20% y 30% de tus calorías totales.
+
+🍞 Carbohidratos
+
+Lo que sobra después de asignar proteínas y grasas.
+</p>
+
 <form method="POST">
     <div class="mb-3"><label>Calorías diarias:</label><input name="calorias" type="number" class="form-control" required></div>
     <button>Calcular</button>
