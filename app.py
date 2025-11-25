@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash,session
+from flask import Flask, render_template, session, request, redirect, url_for, flash
 
 app = Flask(__name__)
 app.secret_key = 'random_value'
@@ -154,6 +154,10 @@ def macronutrientes():
 @app.route('/articulos')
 def articulos():
     return render_template('articulos.html')
+
+@app.route('/ejercicios')
+def ejercicios():
+    return render_template('ejercicios.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
