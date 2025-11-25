@@ -4,29 +4,25 @@
 
 <h1 class="text-center">Calculadora IMC</h1>
 
-<p>¿Qué hace?
-    Mide la relación entre tu peso y tu estatura para dar una idea general de si tu peso está dentro de un rango considerado saludable.
-</p>
+<h6>¿Qué hace?</h6>
+<p>Mide la relación entre tu peso y tu estatura para dar una idea general de si tu peso está dentro de un rango considerado saludable.</p>
 
-<p>Fórmula:
-    IMC = peso (kg) / (estatura (m))^2
-</p>
+<h6>Fórmula:</h6>
+<p>IMC = peso (kg) / (estatura (m))^2</p>
 
-<p>
-    Ejemplo:
-    Peso = 70 kg
-</p>
+<h6>Ejemplo:</h6>
+<ol>
+    <li>Peso = 70 kg</li>
+    <li>Estatura = 1.70 m</li>
+    <li>IMC = 70 / (1.70 × 1.70) = 24.22</li>
+</ol>
 
-<p>
-    Estatura = 1.70 m
-    IMC = 70 / (1.70 × 1.70) = 24.22
-</p>
-
-<p>
-    Notas:
-    - Es una estimación; no distingue entre músculo y grasa.
-    - Se usa para clasificar en rangos: bajo peso, normal, sobrepeso, obesidad.
-</p>    
+<h6>Notas:</h6>
+<ul>
+    <li>No es adecuado para niños, ancianos o mujeres embarazadas.</li>
+    <li>Es una estimación; no distingue entre músculo y grasa.</li>
+    <li>Se usa para clasificar en rangos: bajo peso, normal, sobrepeso, obesidad.</li>
+</ul>
 
 {% with messages = get_flashed_messages(with_categories=true) %} {% for
 category, msg in messages %}
