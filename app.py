@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 import requests
 
-USDA_SEARCH_API="https://api.nal.usda.gov/fdc"
-API_KEY="O9NiAqcunULNoE5rLUG09X6xtMDAymcUQozGCJLS"
+USDA_SEARCH_API = "https://api.nal.usda.gov/fdc/v1/foods/search"
+API_KEY = "O9NiAqcunULNoE5rLUG09X6xtMDAymcUQozGCJLS"
 
 app = Flask(__name__)
 app.secret_key = 'random_value'
@@ -84,11 +84,11 @@ def tmb():
                 tmb_valor = 447.593 + (9.247 * peso) + (3.098 * altura) - (4.330 * edad)
 
             resultado = f"Tu TMB es {tmb_valor:.2f} kcal/día"
-        except Exception:
+        except:
             flash("Error: revisa los datos ingresados.", "danger")
     return render_template('calculadoraTMB.html', resultado=resultado)
 
-@app.route('/gct',methods=['GET', 'POST'])
+@app.route('/gct', methods=['GET', 'POST'])
 def gct():
     resultado = None
     if request.method == 'POST':
@@ -109,7 +109,7 @@ def gct():
 
             gct_valor = tmb * factores_actividad[actividad]
             resultado = f"Tu GCT es {gct_valor:.2f} kcal/día"
-        except Exception:
+        except:
             flash("Error: revisa los datos ingresados.", "danger")
     return render_template('calculadoraGCT.html', resultado=resultado)
 
@@ -130,7 +130,7 @@ def peso_ideal():
                 peso_ideal_valor = 45.5 + 2.3 * ((altura / 2.54) - 60)
 
             resultado = f"Tu peso ideal es {peso_ideal_valor:.2f} kg"
-        except Exception:
+        except:
             flash("Error: revisa los datos ingresados.", "danger")
     return render_template('CalculadoraPCI.html', resultado=resultado)
 
@@ -150,7 +150,7 @@ def macronutrientes():
                 "grasas": round(grasas, 1),
                 "carbohidratos": round(carbohidratos, 1)
             }
-        except Exception:
+        except:
             flash("Error: revisa los datos ingresados.", "danger")
     return render_template('calculadoraM.html', resultado=resultado)
 
@@ -162,7 +162,65 @@ def articulos():
 def ejercicios():
     return render_template('ejercicios.html')
 
+def parse_food(item):
+    nombre = item.get("description", "Sin nombre")
 
+    categoria = (
+        item.get("brandedFoodCategory")
+        or item.get("foodCategory", {}).get("description")
+    )
+
+    label = item.get("labelNutrients", {})
+
+    calorias = label.get("calories", {}).get("value")
+    proteina = label.get("protein", {}).get("value")
+    grasa = label.get("fat", {}).get("value")
+    carbohidratos = label.get("carbohydrates", {}).get("value")
+
+    if calorias is None:
+        for n in item.get("foodNutrients", []):
+            nutrient = n.get("nutrient", {})
+            nombre_nutriente = nutrient.get("name")
+
+            if nombre_nutriente == "Energy":
+                calorias = n.get("amount")
+            elif nombre_nutriente == "Protein":
+                proteina = n.get("amount")
+            elif nombre_nutriente == "Total lipid (fat)":
+                grasa = n.get("amount")
+            elif nombre_nutriente == "Carbohydrate, by difference":
+                carbohidratos = n.get("amount")
+
+    return {
+        "nombre": nombre,
+        "categoria": categoria,
+        "calorias": calorias,
+        "proteina": proteina,
+        "grasa": grasa,
+        "carbohidratos": carbohidratos
+    }
+
+@app.route('/buscar', methods=['GET', 'POST'])
+def buscar():
+    resultados = None
+
+    if request.method == 'POST':
+        query = request.form.get("query", "").strip()
+
+        if query:
+            url = f"{USDA_SEARCH_API}/v1/foods/search"
+            params = {
+                "api_key": API_KEY,
+                "query": query,
+                "pageSize": 10
+            }
+            r = requests.get(url, params=params)
+            data = r.json()
+
+            foods = data.get("foods", [])
+            resultados = [parse_food(f) for f in foods]
+
+    return render_template("buscar.html", resultados=resultados)
 
 if __name__ == '__main__':
     app.run(debug=True)
