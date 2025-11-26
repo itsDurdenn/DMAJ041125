@@ -1,4 +1,8 @@
 from flask import Flask, render_template, session, request, redirect, url_for, flash
+import requests
+
+USDA_SEARCH_API="https://api.nal.usda.gov/fdc"
+API_KEY="O9NiAqcunULNoE5rLUG09X6xtMDAymcUQozGCJLS"
 
 app = Flask(__name__)
 app.secret_key = 'random_value'
@@ -22,7 +26,6 @@ def registro():
         flash('Registro guardado correctamente.', 'success')
         return redirect(url_for('perfil'))
     return render_template('registro.html')
-
 
 @app.route('/sesion')
 def sesion():
@@ -158,6 +161,8 @@ def articulos():
 @app.route('/ejercicios')
 def ejercicios():
     return render_template('ejercicios.html')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
