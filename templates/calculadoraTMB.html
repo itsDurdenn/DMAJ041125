@@ -12,7 +12,7 @@
 <h6>Datos necesarios:</h6>
 <p>Edad, sexo, peso (kg), estatura (cm).</p>
 
-<h5>Fórmulas (Harris-Benedict revisada):</h5>
+<h5 class="text-center">Fórmulas (Harris-Benedict revisada):</h5>
 
 <h6>Para hombres:</h6>
 <p>TMB = 88.362 + (13.397 × peso en kg) + (4.799 × estatura en cm) − (5.677 × edad en años)</p>
@@ -21,11 +21,11 @@
 <h6>Para mujeres:</h6>
 <p>TMB = 447.593 + (9.247 × peso en kg) + (3.098 × estatura en cm) − (4.330 × edad en años)</p>
 
-<p>
-    Notas:
-    - Es el punto de partida para calcular calorías totales diarias.
-    - Otras fórmulas (Mifflin-St Jeor, etc.) existen y suelen dar resultados similares.
-</p>
+<h6>Notas:</h6>
+<ul>
+    <li>Es el punto de partida para calcular calorías totales diarias.</li>
+    <li>Otras fórmulas (Mifflin-St Jeor, etc.) existen y suelen dar resultados similares.</li>
+</ul>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% for category, msg in messages %}
@@ -39,13 +39,13 @@
 
 <form method="post" action="{{ url_for('tmb') }}">
     <label>Peso (kg):</label><br>
-    <input type="text" name="peso" value="{{ form.peso if form else '' }}"><br><br>
+    <input type="text" name="peso" value="{{ form.peso if form else '' }}" class="form-control" placeholder="Peso"><br><br>
 
     <label>Altura (cm o m):</label><br>
-    <input type="text" name="altura" value="{{ form.altura if form else '' }}"><br><br>
+    <input type="text" name="altura" value="{{ form.altura if form else '' }}" class="form-control" placeholder="Altura"><br><br>
 
     <label>Edad:</label><br>
-    <input type="number" name="edad" value="{{ form.edad if form else '' }}"><br><br>
+    <input type="number" name="edad" value="{{ form.edad if form else '' }}" class="form-control" placeholder="Edad"><br><br>
 
     <label>Sexo:</label><br>
     <select name="sexo">
@@ -53,7 +53,7 @@
     <option value="Femenino" {% if form and form.sexo and form.sexo.lower().startswith('f') %}selected{% endif %}>Femenino</option>
     </select><br><br>
 
-    <button type="submit">Calcular TMB</button>
+    <button type="submit" class="btn btn-success">Calcular TMB</button>
 </form>
 
 {% endblock contenido %}

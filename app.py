@@ -200,7 +200,7 @@ def parse_food(item):
         "carbohidratos": carbohidratos
     }
 
-@app.route('/buscar', methods=['GET', 'POST'])
+@app.route('/analizador', methods=['GET', 'POST'])
 def buscar():
     resultados = None
 
@@ -220,7 +220,7 @@ def buscar():
             foods = data.get("foods", [])
             resultados = [parse_food(f) for f in foods]
 
-    return render_template("buscar.html", resultados=resultados)
+    return render_template("analizador.html", resultados=resultados)
 
 if __name__ == '__main__':
     app.run(debug=True)

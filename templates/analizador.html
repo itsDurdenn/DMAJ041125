@@ -2,6 +2,42 @@
 
 {% block contenido %}
 
+<div class="container py-4">
+    <h1 class="text-center mb-4">Analizador de comida</h1>
 
+    <form method="POST" action="/buscar" class="card p-3 shadow-sm">
+        <div class="mb-3">
+            <label class="form-label">Ingresa el nombre del alimento:</label>
+            <input type="text" name="query" class="form-control" placeholder="Ejemplo: manzana, pollo, arroz" required>
+        </div>
+        <button class="btn btn-primary w-100">Buscar</button>
+    </form>
+
+    <hr class="my-4">
+
+    {% if resultados %}
+    <h3>Resultados:</h3>
+
+    {% for item in resultados %}
+        <div class="card shadow-sm mb-3 p-3">
+            <h4>{{ item.nombre }}</h4>
+
+            {% if item.categoria %}
+            <p><strong>Categoría:</strong> {{ item.categoria }}</p>
+            {% endif %}
+
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Calorías:</strong> {{ item.calorias or "N/A" }}</li>
+                <li class="list-group-item"><strong>Proteínas:</strong> {{ item.proteina or "N/A" }}</li>
+                <li class="list-group-item"><strong>Grasas:</strong> {{ item.grasa or "N/A" }}</li>
+                <li class="list-group-item"><strong>Carbohidratos:</strong> {{ item.carbohidratos or "N/A" }}</li>
+            </ul>
+        </div>
+    {% endfor %}
+
+    {% elif resultados is not none %}
+    <p class="text-danger">No se encontraron resultados.</p>
+    {% endif %}
+</div>
 
 {% endblock contenido %}
