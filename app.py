@@ -1,8 +1,9 @@
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 import requests
 
-USDA_SEARCH_API = "https://api.nal.usda.gov/fdc/v1/foods/search"
-API_KEY = "O9NiAqcunULNoE5rLUG09X6xtMDAymcUQozGCJLS"
+
+USDA_SEARCH_API = "https://api.nal.usda.gov/fdc/v1"
+API_KEY = "2SOZn8q2Z6rlJ7cfh1UP9zgc4QXUaYmACPKVjl6N"
 
 app = Flask(__name__)
 app.secret_key = 'random_value'
@@ -162,65 +163,175 @@ def articulos():
 def ejercicios():
     return render_template('ejercicios.html')
 
-def parse_food(item):
-    nombre = item.get("description", "Sin nombre")
 
-    categoria = (
-        item.get("brandedFoodCategory")
-        or item.get("foodCategory", {}).get("description")
-    )
+def calcular_macros_por_ingrediente(info, gramos):
+    """Calcula kcal y macros en gramos para una cantidad dada.
 
-    label = item.get("labelNutrients", {})
+    info: dict con claves opcionales 'calorias', 'proteina', 'grasa', 'carbohidratos'
+        (valores por 100 g).
+    gramos: cantidad en gramos (float).
+    Retorna un dict con 'calorias', 'proteina_g', 'grasa_g', 'carbohidratos_g'.
+    """
+    factor = (gramos / 100.0) if gramos else 0.0
 
-    calorias = label.get("calories", {}).get("value")
-    proteina = label.get("protein", {}).get("value")
-    grasa = label.get("fat", {}).get("value")
-    carbohidratos = label.get("carbohydrates", {}).get("value")
-
-    if calorias is None:
-        for n in item.get("foodNutrients", []):
-            nutrient = n.get("nutrient", {})
-            nombre_nutriente = nutrient.get("name")
-
-            if nombre_nutriente == "Energy":
-                calorias = n.get("amount")
-            elif nombre_nutriente == "Protein":
-                proteina = n.get("amount")
-            elif nombre_nutriente == "Total lipid (fat)":
-                grasa = n.get("amount")
-            elif nombre_nutriente == "Carbohydrate, by difference":
-                carbohidratos = n.get("amount")
+    calorias = (info.get('calorias') or 0.0) * factor
+    proteina_g = (info.get('proteina') or 0.0) * factor
+    grasa_g = (info.get('grasa') or 0.0) * factor
+    carbo_g = (info.get('carbohidratos') or 0.0) * factor
 
     return {
-        "nombre": nombre,
-        "categoria": categoria,
-        "calorias": calorias,
-        "proteina": proteina,
-        "grasa": grasa,
-        "carbohidratos": carbohidratos
+        'calorias': round(calorias, 2),
+        'proteina_g': round(proteina_g, 2),
+        'grasa_g': round(grasa_g, 2),
+        'carbohidratos_g': round(carbo_g, 2)
+    }
+
+
+def calcular_porcentajes_macros(total_calorias, proteina_g, grasa_g, carbo_g):
+    """Devuelve el % energético aportado por cada macronutriente respecto a `total_calorias`.
+
+    Retorna dict con claves 'proteina_pct', 'grasa_pct', 'carbohidratos_pct'.
+    """
+    if not total_calorias or total_calorias <= 0:
+        return {'proteina_pct': 0.0, 'grasa_pct': 0.0, 'carbohidratos_pct': 0.0}
+
+    prot_cal = proteina_g * 4
+    grasa_cal = grasa_g * 9
+    carbo_cal = carbo_g * 4
+
+    return {
+        'proteina_pct': round((prot_cal / total_calorias) * 100, 1),
+        'grasa_pct': round((grasa_cal / total_calorias) * 100, 1),
+        'carbohidratos_pct': round((carbo_cal / total_calorias) * 100, 1)
     }
 
 @app.route('/analizador', methods=['GET', 'POST'])
-def buscar():
-    resultados = None
-
+def analizador():
+    resultado = None
+    error_parse = None
+    error_usda = None
     if request.method == 'POST':
-        query = request.form.get("query", "").strip()
+        receta = request.form.get('receta', '')
+        lineas = [l.strip() for l in receta.split('\n') if l.strip()]
 
-        if query:
-            url = f"{USDA_SEARCH_API}/v1/foods/search"
-            params = {
-                "api_key": API_KEY,
-                "query": query,
-                "pageSize": 10
-            }
-            r = requests.get(url, params=params)
-            data = r.json()
+        ingredientes_proc = []
+        total = {'calorias': 0.0, 'proteina': 0.0, 'grasa': 0.0, 'carbohidratos': 0.0}
 
-            foods = data.get("foods", [])
-            resultados = [parse_food(f) for f in foods]
+        for linea in lineas:
+            partes = linea.split()
+            if len(partes) < 2:
+                ingredientes_proc.append({'linea': linea, 'error': 'Formato inválido'})
+                error_parse = True
+                continue
 
-    return render_template("analizador.html", resultados=resultados)
+            # parsear cantidad y unidad simples
+            try:
+                cantidad = float(partes[0].replace(',', '.'))
+            except Exception:
+                ingredientes_proc.append({'linea': linea, 'error': 'Cantidad no numérica'})
+                error_parse = True
+                continue
+
+            unidad = partes[1].lower()
+            nombre = ' '.join(partes[2:]) if len(partes) > 2 else ' '.join(partes[1:])
+
+            # convertir a gramos según unidad común
+            gramos = None
+            if unidad in ('g', 'gr', 'gramo', 'gramos'):
+                gramos = cantidad
+            elif unidad in ('kg', 'kilogramo', 'kilogramos'):
+                gramos = cantidad * 1000
+            elif unidad in ('cucharada', 'cucharadas'):
+                gramos = cantidad * 15
+            elif unidad in ('cucharadita', 'cucharaditas'):
+                gramos = cantidad * 5
+            elif unidad in ('taza', 'tazas'):
+                gramos = cantidad * 240
+            elif unidad in ('huevo', 'huevos'):
+                gramos = cantidad * 50
+            else:
+                # si no reconocemos la unidad, intentar usar todo lo que sigue como nombre
+                gramos = None
+
+            if gramos is None:
+                ingredientes_proc.append({'linea': linea, 'error': 'Unidad no reconocida'})
+                error_parse = True
+                continue
+
+            # buscar en USDA por nombre
+            params = {'api_key': API_KEY, 'query': nombre or partes[-1], 'pageSize': 1}
+            try:
+                r = requests.get(f"{USDA_SEARCH_API}/foods/search", params=params, timeout=10)
+                r.raise_for_status()
+                data = r.json()
+            except Exception:
+                ingredientes_proc.append({'linea': linea, 'error': 'Error consultando USDA'})
+                error_usda = True
+                continue
+
+            foods = data.get('foods') or []
+            if not foods:
+                ingredientes_proc.append({'linea': linea, 'error': 'No encontrado en la base USDA'})
+                error_usda = True
+                continue
+
+            food = foods[0]
+            fdcId = food.get('fdcId')
+
+            # intentar obtener detalles nutricionales completos
+            nutri_data = food
+            if fdcId:
+                try:
+                    r2 = requests.get(f"{USDA_SEARCH_API}/food/{fdcId}", params={'api_key': API_KEY}, timeout=10)
+                    r2.raise_for_status()
+                    nutri_data = r2.json()
+                except Exception:
+                    nutri_data = food
+
+            # extraer valores por 100g
+            info = {'calorias': 0.0, 'proteina': 0.0, 'grasa': 0.0, 'carbohidratos': 0.0}
+            label = nutri_data.get('labelNutrients') or {}
+            if label:
+                # labelNutrients puede contener dicts con 'calories': {'value': ...}
+                def _get_label(k):
+                    v = label.get(k)
+                    if isinstance(v, dict):
+                        return v.get('value')
+                    return v
+
+                info['calorias'] = _get_label('calories') or info['calorias']
+                info['proteina'] = _get_label('protein') or info['proteina']
+                info['grasa'] = _get_label('fat') or info['grasa']
+                info['carbohidratos'] = _get_label('carbohydrates') or info['carbohidratos']
+            else:
+                for n in nutri_data.get('foodNutrients', []):
+                    nutrient = n.get('nutrient') or {}
+                    name = nutrient.get('name', '').lower() if nutrient else n.get('nutrientName', '').lower()
+                    amount = n.get('amount') or n.get('value') or 0
+                    if 'energy' in name or 'calor' in name:
+                        info['calorias'] = info['calorias'] or amount
+                    elif 'protein' in name or 'proteina' in name:
+                        info['proteina'] = info['proteina'] or amount
+                    elif 'lipid' in name or 'fat' in name or 'grasa' in name:
+                        info['grasa'] = info['grasa'] or amount
+                    elif 'carbohydrate' in name or 'carbohidr' in name:
+                        info['carbohidratos'] = info['carbohidratos'] or amount
+
+            macros = calcular_macros_por_ingrediente(info, gramos)
+
+            ingredientes_proc.append({'linea': linea, 'nombre': nombre, 'gramos': gramos, 'macros': macros})
+
+            total['calorias'] += macros['calorias']
+            total['proteina'] += macros['proteina_g']
+            total['grasa'] += macros['grasa_g']
+            total['carbohidratos'] += macros['carbohidratos_g']
+
+        total_porcentajes = calcular_porcentajes_macros(total['calorias'], total['proteina'], total['grasa'], total['carbohidratos'])
+        resultado = {'ingredientes': ingredientes_proc, 'total': total, 'total_porcentajes': total_porcentajes}
+
+    return render_template('analizador.html', resultado=resultado, error_parse=error_parse, error_usda=error_usda, receta_texto=(request.form.get('receta') if request.method == 'POST' else ''))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
