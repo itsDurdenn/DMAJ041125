@@ -224,7 +224,7 @@ def analizador():
                 error_parse = True
                 continue
 
-            # parsear cantidad y unidad simples
+            
             try:
                 cantidad = float(partes[0].replace(',', '.'))
             except Exception:
@@ -235,7 +235,7 @@ def analizador():
             unidad = partes[1].lower()
             nombre = ' '.join(partes[2:]) if len(partes) > 2 else ' '.join(partes[1:])
 
-            # convertir a gramos según unidad común
+          
             gramos = None
             if unidad in ('g', 'gr', 'gramo', 'gramos'):
                 gramos = cantidad
@@ -250,7 +250,7 @@ def analizador():
             elif unidad in ('huevo', 'huevos'):
                 gramos = cantidad * 50
             else:
-                # si no reconocemos la unidad, intentar usar todo lo que sigue como nombre
+            
                 gramos = None
 
             if gramos is None:
@@ -258,7 +258,7 @@ def analizador():
                 error_parse = True
                 continue
 
-            # buscar en USDA por nombre
+         
             params = {'api_key': API_KEY, 'query': nombre or partes[-1], 'pageSize': 1}
             try:
                 r = requests.get(f"{USDA_SEARCH_API}/foods/search", params=params, timeout=10)
@@ -278,7 +278,7 @@ def analizador():
             food = foods[0]
             fdcId = food.get('fdcId')
 
-            # intentar obtener detalles nutricionales completos
+          
             nutri_data = food
             if fdcId:
                 try:
@@ -288,11 +288,11 @@ def analizador():
                 except Exception:
                     nutri_data = food
 
-            # extraer valores por 100g
+            
             info = {'calorias': 0.0, 'proteina': 0.0, 'grasa': 0.0, 'carbohidratos': 0.0}
             label = nutri_data.get('labelNutrients') or {}
             if label:
-                # labelNutrients puede contener dicts con 'calories': {'value': ...}
+              
                 def _get_label(k):
                     v = label.get(k)
                     if isinstance(v, dict):
