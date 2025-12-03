@@ -235,7 +235,7 @@ def analizador():
             unidad = partes[1].lower()
             nombre = ' '.join(partes[2:]) if len(partes) > 2 else ' '.join(partes[1:])
 
-          
+        
             gramos = None
             if unidad in ('g', 'gr', 'gramo', 'gramos'):
                 gramos = cantidad
@@ -258,7 +258,7 @@ def analizador():
                 error_parse = True
                 continue
 
-         
+        
             params = {'api_key': API_KEY, 'query': nombre or partes[-1], 'pageSize': 1}
             try:
                 r = requests.get(f"{USDA_SEARCH_API}/foods/search", params=params, timeout=10)
@@ -278,7 +278,7 @@ def analizador():
             food = foods[0]
             fdcId = food.get('fdcId')
 
-          
+        
             nutri_data = food
             if fdcId:
                 try:
@@ -292,7 +292,7 @@ def analizador():
             info = {'calorias': 0.0, 'proteina': 0.0, 'grasa': 0.0, 'carbohidratos': 0.0}
             label = nutri_data.get('labelNutrients') or {}
             if label:
-              
+            
                 def _get_label(k):
                     v = label.get(k)
                     if isinstance(v, dict):
@@ -331,7 +331,9 @@ def analizador():
 
     return render_template('analizador.html', resultado=resultado, error_parse=error_parse, error_usda=error_usda, receta_texto=(request.form.get('receta') if request.method == 'POST' else ''))
 
-
+@app.route('/banco')
+def banco():
+    return render_template('banco.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

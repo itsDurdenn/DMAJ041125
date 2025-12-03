@@ -1,11 +1,66 @@
-{% extends "Base.html" %} 
+{% extends "Base.html" %} {% block contenido %}
 
-{% block contenido %}
+<div class="container py-4">
+  <h1 class="text-center mb-3">Banco de Recetas</h1>
 
-<h1 class="text-center">Banco de Recetas</h1>
-<p>Bienvenido al Banco de Recetas, un recurso diseñado para ayudarte a descubrir y compartir recetas saludables y nutritivas. 
-    Aquí encontrarás una variedad de recetas que se adaptan a diferentes necesidades dietéticas y preferencias alimenticias. 
-    Nuestro objetivo es proporcionarte opciones deliciosas que promuevan un estilo de vida equilibrado y saludable.
-</p>
+  <div class="row g-3">
+    <div class="col-6 col-md-3">
+      <div class="card">
+        <img
+          src="/static/quinoa.webp"
+          class="card-img-top recipe-thumb"
+          alt="Ensalada de Quinoa"
+          data-title="Ensalada de Quinoa"
+          data-recipe="Ingredientes:\n- 1 taza de quinoa\n- 2 tazas de agua\nPreparación:\n1. Lavar la quinoa.\n2. Cocer 15 min."
+          style="cursor: pointer"
+        />
+        <div class="card-body p-2">
+          <h6 class="card-title mb-0">Ensalada de Quinoa</h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <div class="card">
+        <img
+          src="/static/img/avena.jpg"
+          class="card-img-top recipe-thumb"
+          alt="Avena con Frutas"
+          data-title="Avena con Frutas"
+          data-recipe="Ingredientes:\n- 1/2 taza de avena\n- 1 taza de leche\nPreparación:\n1. Mezclar y servir."
+          style="cursor: pointer"
+        />
+        <div class="card-body p-2">
+          <h6 class="card-title mb-0">Avena con Frutas</h6>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade" id="recipeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle"></h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <pre id="modalRecipe" style="white-space: pre-wrap"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock contenido %}
